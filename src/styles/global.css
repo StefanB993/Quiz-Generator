@@ -1,0 +1,12 @@
+:root {
+  --clr-main: #471323;
+  --clr-accent: #e6af2e;
+  --fs-100: 1rem;
+}
+
+button {
+  border: none;
+  background-color: transparent;
+  color: inherit;
+  font-size: inherit;
+}

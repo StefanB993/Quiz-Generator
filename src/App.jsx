@@ -1,35 +1,96 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useReducer } from "react";
+import StartScreen from "./components/StartScreen/StartScreen";
+import "./App.css";
+import Loader from "./components/Loader/Loader";
+import Error from "./components/Error/Error";
+import Questions from "./components/Questions/Questions";
+import FinishScreen from "./components/FinishScreen/FinishScreen";
 
-function App() {
-  const [count, setCount] = useState(0)
+const initalState = {
+  questions: [],
+  status: "generate",
+  currentQuestionIndex: 0,
+  score: 0,
+  error: "",
+  answer: null,
+  correctAnswers: 0,
+};
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+function reducer(state, action) {
+  switch (action.type) {
+    case "generate":
+      return { ...state, status: "generate" };
+    case "loading":
+      return { ...state, status: "loading" };
+    case "dataReceived":
+      return { ...state, status: "ready", questions: action.payload };
+    case "error": {
+      return { ...state, status: "error", error: action.payload };
+    }
+    case "answer": {
+      return {
+        ...state,
+        answer: action.payload,
+        correctAnswers:
+          action.payload ===
+          state.questions[state.currentQuestionIndex].correct_answer
+            ? state.correctAnswers + 1
+            : state.correctAnswers,
+      };
+    }
+    case "next": {
+      return {
+        ...state,
+        currentQuestionIndex: state.currentQuestionIndex + 1,
+        answer: null,
+      };
+    }
+
+    case "finish": {
+      return {
+        ...state,
+        status: "finish",
+      };
+    }
+
+    case "new": {
+      return {
+        ...initalState,
+      };
+    }
+  }
 }
 
-export default App
+function App() {
+  const [state, dispatch] = useReducer(reducer, initalState);
+  const { status, questions, currentQuestionIndex, answer, correctAnswers } =
+    state;
+  const questionData = questions[currentQuestionIndex];
+  const numQuestions = questions.length;
+
+  return (
+    <div className="app">
+      {status === "loading" && <Loader />}
+      {status === "generate" && <StartScreen dispatch={dispatch} />}
+      {status === "error" && <Error dispatch={dispatch} error={state.error} />}
+      {status === "ready" && (
+        <Questions
+          questionData={questionData}
+          dispatch={dispatch}
+          answer={answer}
+          index={currentQuestionIndex}
+          numQuestions={numQuestions}
+        />
+      )}
+      {status === "finish" && (
+        <FinishScreen
+          numQuestions={numQuestions}
+          correctAnswers={correctAnswers}
+          dispatch={dispatch}
+        />
+      )}
+    </div>
+  );
+}
+
+export default App;

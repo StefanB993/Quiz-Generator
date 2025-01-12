@@ -1,0 +1,43 @@
+.question {
+  display: grid;
+  gap: 3rem;
+  &__header {
+    text-align: center;
+  }
+
+  &__options {
+    display: grid;
+    justify-content: center;
+    gap: 1.5rem;
+    list-style: none;
+  }
+
+  &__option {
+    border: 1px solid var(--clr-accent);
+    padding: 1rem 2rem;
+    border-radius: 2rem;
+    text-align: center;
+    transition: all 0.2s;
+    width: 100%;
+
+    &:not([disabled]):hover {
+      background-color: var(--clr-accent);
+      color: var(--clr-main);
+      scale: (1.1);
+    }
+
+    &[disabled]:hover {
+      cursor: not-allowed;
+    }
+  }
+
+  &__answer {
+    transform: translateX(2rem);
+  }
+
+  &__correct {
+    background-color: var(--clr-accent);
+    color: var(--clr-main);
+    scale: (1.1);
+  }
+}

@@ -1,0 +1,15 @@
+.error {
+  display: grid;
+  place-items: center;
+  gap: 2rem;
+
+  &__span {
+    font-size: 2rem;
+  }
+
+  &__message {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+}

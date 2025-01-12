@@ -1,0 +1,16 @@
+.form {
+  display: grid;
+  gap: 1rem;
+  margin-top: 2rem;
+
+  &__group {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  &__input,
+  &__select {
+    padding: 0.5em;
+    outline: none;
+  }
+}

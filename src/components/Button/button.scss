@@ -1,0 +1,17 @@
+.btn {
+  background-color: transparent;
+  border: 1px solid var(--clr-accent);
+  color: var(--clr-accent);
+  font-size: var(--fs-100);
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 1em 2em;
+  border-radius: 2em;
+  transition: all 0.3s;
+
+  &:hover,
+  &:active {
+    background-color: var(--clr-accent);
+    color: var(--clr-main);
+  }
+}
